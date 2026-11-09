@@ -22,7 +22,7 @@ st.divider()
 ESPESSURA_FIXADOR = 0.0035  # 3.5mm em metros
 
 LIMITES_LINHAS = {
-    2: 62.0,  
+    2: 150.0,  
     3: 52.0,  
     5: 42.0   
 }
@@ -577,3 +577,4 @@ if len(st.session_state["mesas"]) > 0:
             st.rerun()
 else:
     st.info("Nenhuma mesa adicionada ao projeto ainda. Realize um cálculo acima e clique em '➕ Adicionar Esta Mesa ao Projeto'.")
+
