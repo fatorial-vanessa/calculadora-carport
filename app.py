@@ -1,15 +1,7 @@
 import math
 import io
-import subprocess
-import sys
 import pandas as pd
 import streamlit as st
-
-try:
-    import openpyxl
-except ImportError:
-    subprocess.check_call([sys.executable, "-m", "pip", "install", "openpyxl"])
-    import openpyxl
 
 st.set_page_config(
     page_title="Calculadora Carport Fatorial", page_icon="🚗", layout="wide"
@@ -148,7 +140,7 @@ def callback_adicionar_modulos():
         st.session_state["linhas_projeto"] = res_m["linhas"]
         st.session_state["res_modulos"] = None
 
-# Inicialização dos estados no session_state
+
 if "mesas" not in st.session_state:
     st.session_state["mesas"] = []
 
@@ -247,6 +239,7 @@ with tab_vagas:
                 "nome_mesa": nome_mesa_v if nome_mesa_v else f"Mesa {len(st.session_state['mesas']) + 1}"
             }
 
+ 
     if st.session_state.get("res_vagas"):
         res = st.session_state["res_vagas"]
         st.divider()
@@ -406,6 +399,7 @@ with tab_modulos:
                 "nome_mesa": nome_mesa_m if nome_mesa_m else f"Mesa {len(st.session_state['mesas']) + 1}"
             }
 
+
     if st.session_state.get("res_modulos"):
         res_m = st.session_state["res_modulos"]
         st.divider()
@@ -501,10 +495,13 @@ if len(st.session_state["mesas"]) > 0:
         [col_mapping.get(c, ("Outros", c)) for c in df_visualizacao.columns]
     )
     
+   
     st.dataframe(df_visualizacao, use_container_width=True, hide_index=True)
 
+    # --- BOTÕES DE EXPORTAÇÃO ---
     col_exp1, col_exp2, _ = st.columns([1, 1, 2])
 
+    # Botão CSV
     csv_data = df_projeto.to_csv(index=False).encode("utf-8-sig")
     with col_exp1:
         st.download_button(
@@ -513,7 +510,8 @@ if len(st.session_state["mesas"]) > 0:
             file_name="resumo_carport.csv",
             mime="text/csv",
         )
-        
+
+    # Botão Excel Nativo (.xlsx)
     buffer = io.BytesIO()
     with pd.ExcelWriter(buffer, engine="openpyxl") as writer:
         df_projeto.to_excel(writer, sheet_name="Resumo Carport", index=False)
@@ -527,6 +525,7 @@ if len(st.session_state["mesas"]) > 0:
             mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
         )
 
+    # --- GERENCIAMENTO DE MESAS (EXCLUIR LINHA ESPECÍFICA) ---
     col_del1, col_del2 = st.columns([2, 1])
     with col_del1:
         nomes_mesas = [m["Mesa"] for m in st.session_state["mesas"]]
@@ -542,6 +541,7 @@ if len(st.session_state["mesas"]) > 0:
     st.markdown("---")
     st.subheader("📦 Totais Consolidados do Projeto")
     
+    # Destaque para o Total de Módulos (Vendedor)
     total_modulos_projeto = df_projeto["Módulos"].sum()
     st.metric("☀️ Total de Módulos (Painéis) do Projeto", f"{total_modulos_projeto} unidades")
 
