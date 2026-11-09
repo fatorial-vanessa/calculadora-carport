@@ -22,7 +22,7 @@ st.divider()
 ESPESSURA_FIXADOR = 0.0035  # 3.5mm em metros
 
 LIMITES_LINHAS = {
-    2: 150.0,  
+    2: 62.0,  
     3: 52.0,  
     5: 42.0   
 }
